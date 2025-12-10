@@ -119,7 +119,8 @@ class FlightManager:
 
     def submit_pirep(self, landing_rate, fuel_used, total_time_min):
         payload = {
-            "flightNumber": self.flight_id,
+            "username": self.pilot_id,
+            "flightId": self.flight_id,
             "dep": self.dep,
             "arr": self.arr,
             "aircraft": self.aircraft_type,
@@ -127,7 +128,8 @@ class FlightManager:
             "distance": int(self.distance_flown * 0.539957), # KM to NM
             "landingRate": int(landing_rate),
             "fuelUsed": int(fuel_used),
-            "status": "Accepted" # Auto-accept for now, or "Pending"
+            "status": "Approved", # Trusted source
+            "proofType": "acars"
         }
         try:
             print(f"Submitting PIREP: {payload}")
