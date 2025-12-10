@@ -1,0 +1,2 @@
+requests
+SimConnect; platform_system=="Windows"
