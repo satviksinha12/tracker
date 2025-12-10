@@ -75,7 +75,14 @@ def run_msfs(pilot_id, flight_id, aircraft, dep, arr, cruise_alt):
             time.sleep(1)
 
         except KeyboardInterrupt:
-            print("Stopping...")
+            print("\n[MANUAL OVERRIDE] Tracking Paused.")
+            choice = input("Do you want to file this PIREP now? (y/n): ").strip().lower()
+            if choice == 'y':
+                duration_min = (time.time() - start_time) / 60
+                # Use last known vs or default
+                l_rate = int(vs) if 'vs' in locals() else -150
+                manager.submit_pirep(l_rate, 0, duration_min)
+            print("Exiting...")
             break
         except Exception as e:
             print(f"Error: {e}")

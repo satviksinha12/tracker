@@ -86,6 +86,12 @@ def run_xplane(pilot_id, flight_id, aircraft, dep, arr, cruise_alt):
                 break
                 
         except KeyboardInterrupt:
+            print("\n[MANUAL OVERRIDE] Tracking Paused.")
+            choice = input("Do you want to file this PIREP now? (y/n): ").strip().lower()
+            if choice == 'y':
+                duration_min = (time.time() - start_time) / 60
+                manager.submit_pirep(-150, 0, duration_min)
+            print("Exiting...")
             break
         except Exception as e:
             print(f"Error: {e}")
