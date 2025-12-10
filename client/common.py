@@ -16,12 +16,13 @@ class FlightPhase:
     PARKED = "Parked"
 
 class FlightManager:
-    def __init__(self, pilot_id, callsign, aircraft_type, dep, arr):
+    def __init__(self, pilot_id, callsign, aircraft_type, dep, arr, cruise_alt):
         self.pilot_id = pilot_id
         self.callsign = callsign
         self.aircraft_type = aircraft_type
         self.dep = dep
         self.arr = arr
+        self.cruise_alt = int(cruise_alt)
         self.phase = FlightPhase.BOARDING
         self.flight_id = f"{callsign}"
         
@@ -50,11 +51,13 @@ class FlightManager:
                 self.phase = FlightPhase.CLIMBING
         
         elif self.phase == FlightPhase.CLIMBING:
-            if vertical_speed < 100 and vertical_speed > -100 and alt > 10000:
+            # Transition to Cruise if within 500ft of Cruise Altitude OR above 10000ft if no cruise set (legacy)
+            if (alt > self.cruise_alt - 1000) or (vertical_speed < 100 and vertical_speed > -100 and alt > 10000 and self.cruise_alt > 20000):
                 self.phase = FlightPhase.CRUISE
         
         elif self.phase == FlightPhase.CRUISE:
-            if vertical_speed < -500:
+            # Descent detected if VS is negative AND we are below cruise altitude buffer
+            if vertical_speed < -200 and alt < self.cruise_alt - 500:
                 self.phase = FlightPhase.DESCENDING
         
         elif self.phase == FlightPhase.DESCENDING:
@@ -70,7 +73,7 @@ class FlightManager:
                 self.phase = FlightPhase.TAXI_IN
         
         elif self.phase == FlightPhase.TAXI_IN:
-            if not engines_running and speed < 1:
+            if not engines_running and speed < 5:  # Changed from 1 to 5 to handle sim jitter
                 self.phase = FlightPhase.PARKED
 
         if alt > self.max_alt:

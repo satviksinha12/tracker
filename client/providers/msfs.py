@@ -6,7 +6,7 @@ except ImportError:
 
 from common import FlightManager, FlightPhase
 
-def run_msfs(pilot_id, flight_id, aircraft, dep, arr):
+def run_msfs(pilot_id, flight_id, aircraft, dep, arr, cruise_alt):
     if not SimConnect:
         print("Error: SimConnect library not installed. Please run 'pip install SimConnect'")
         return
@@ -19,7 +19,7 @@ def run_msfs(pilot_id, flight_id, aircraft, dep, arr):
         print(f"Could not connect to MSFS: {e}")
         return
 
-    manager = FlightManager(pilot_id, flight_id, aircraft, dep, arr)
+    manager = FlightManager(pilot_id, flight_id, aircraft, dep, arr, cruise_alt)
     
     print(f"Connected to MSFS! Tracking Flight {flight_id}")
     

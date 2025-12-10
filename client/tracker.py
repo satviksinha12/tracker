@@ -21,17 +21,20 @@ def main():
     aircraft = input("Aircraft (e.g., A320): ").strip()
     dep = input("Departure ICAO: ").strip().upper()
     arr = input("Arrival ICAO: ").strip().upper()
+    cruise_alt = input("Cruise Altitude (ft, e.g. 35000): ").strip()
+    if not cruise_alt: cruise_alt = 30000 # Default
+    else: cruise_alt = int(cruise_alt)
     
     if choice == "1":
         try:
             from providers.msfs import run_msfs
-            run_msfs(pilot_id, callsign, aircraft, dep, arr)
-        except ImportError:
+            run_msfs(pilot_id, callsign, aircraft, dep, arr, cruise_alt)
+        except ImportContextError:
             print("Error: Could not import MSFS provider. Are requirements installed?")
     elif choice == "2":
         try:
             from providers.xplane import run_xplane
-            run_xplane(pilot_id, callsign, aircraft, dep, arr)
+            run_xplane(pilot_id, callsign, aircraft, dep, arr, cruise_alt)
         except ImportError:
             print("Error: Could not import X-Plane provider.")
     else:

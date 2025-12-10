@@ -3,7 +3,7 @@ import struct
 import time
 from common import FlightManager, FlightPhase
 
-def run_xplane(pilot_id, flight_id, aircraft, dep, arr):
+def run_xplane(pilot_id, flight_id, aircraft, dep, arr, cruise_alt):
     # UDP Setup
     UDP_IP = "0.0.0.0"
     UDP_PORT = 49000
@@ -14,7 +14,7 @@ def run_xplane(pilot_id, flight_id, aircraft, dep, arr):
     print(f"Listening for X-Plane on port {UDP_PORT}...")
     print("Please ensure Data Output for indexes 3, 17, 20 are checked in X-Plane Settings.")
 
-    manager = FlightManager(pilot_id, flight_id, aircraft, dep, arr)
+    manager = FlightManager(pilot_id, flight_id, aircraft, dep, arr, cruise_alt)
     start_time = time.time()
 
     data_store = {
